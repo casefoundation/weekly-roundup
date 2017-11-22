@@ -1,0 +1,31 @@
+{
+  "name": "weekly-roundup",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "bookshelf": "^0.11.1",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.0",
+    "knex": "^0.14.1",
+    "morgan": "^1.9.0",
+    "passport-jwt": "^3.0.1",
+    "passport": "^0.4.0",
+    "randomstring": "^1.1.5",
+    "sqlite3": "^3.1.13",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
