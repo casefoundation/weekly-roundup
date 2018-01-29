@@ -10,21 +10,41 @@
     "bcrypt": "^1.0.3",
     "body-parser": "^1.18.2",
     "bookshelf": "^0.11.1",
+    "cheerio": "^1.0.0-rc.2",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "html-metadata": "^1.6.3",
     "jsonwebtoken": "^8.1.0",
     "knex": "^0.14.1",
     "morgan": "^1.9.0",
-    "passport-jwt": "^3.0.1",
+    "mysql": "^2.15.0",
+    "mysql2": "^1.5.1",
+    "node-summary": "^1.2.0",
+    "node-tldr": "^0.4.14",
     "passport": "^0.4.0",
+    "passport-jwt": "^3.0.1",
+    "pg": "^7.4.1",
+    "preq": "^0.5.4",
+    "puppeteer": "^1.0.0",
     "randomstring": "^1.1.5",
+    "request": "^2.83.0",
     "sqlite3": "^3.1.13",
-    "uuid": "^3.1.0"
+    "uuid": "^3.2.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "eslint": "^4.16.0",
+    "eslint-config-equimper": "^2.2.1",
+    "eslint-plugin-class-property": "^1.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "knex": "^0.14.2",
+    "mocha": "^5.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --exit test",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC"

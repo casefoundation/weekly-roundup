@@ -1,93 +1,114 @@
+require('dotenv').config();
 const knex = require('../database').knex;
 const bookshelf = require('bookshelf')(knex);
 const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
-const randomstring = require('randomstring');
+
 bookshelf.plugin('virtuals');
 
 const User = module.exports = bookshelf.Model.extend({
-  'tableName': 'users',
-  'hasTimestamps': true,
-  'verifyPassword': function(password) {
-    return bcrypt.compareSync(password,this.get('password'));
+  tableName: 'user',
+  hasTimestamps: true,
+  verifyPassword: function (password) {
+    return bcrypt.compareSync(password, this.get('password'));
   },
-  'setPassword': function(password) {
-    this.set('password',bcrypt.hashSync(password,10));
+  setPassword: function (password) {
+    this.set('password', bcrypt.hashSync(password, 10));
   },
-  'resetAccount': function() {
-    this.set('resetCode',uuidv4());
+  resetAccount: function () {
+    this.set('resetCode', uuidv4());
     this.set('resetExpiration', new Date(new Date().getTime() + (1000 * 60 * 60 * 24)));
     return this.save()
       .then(() => {
-        //TODO send reset email
+        // TODO send reset email
       });
   },
-  'isAdmin': function() {
+  isAdmin: function () {
     return this.get('role') === 'admin';
   },
-  'getUserPermissions': function(user) {
+  getUserPermissions: function (user) {
     if (this.isAdmin() || user.get('id') === this.get('id')) {
       return {
-        'view': true,
-        'edit': true
-      };
-    } else {
-      return {
-        'view': false,
-        'edit': false
+        view: true,
+        edit: true,
       };
     }
+    return {
+      view: false,
+      edit: false,
+    };
   },
-  'toJSON': function(options) {
-    const sendOpts = options ? Object.assign(options,{'virtuals': true}) : {'virtuals': true};
-    const json = bookshelf.Model.prototype.toJSON.apply(this,sendOpts);
-    json.active = json.active === true || json.active === 1;
+  toJSON: function (options) {
+    const sendOpts = options ? Object.assign(options, {
+      virtuals: true,
+    }) : {
+      virtuals: true,
+    };
+    const json = bookshelf.Model.prototype.toJSON.apply(this, sendOpts);
+    json.active = json.active || json.active === 1;
     delete json.password;
-    delete json.resetCode;
-    delete json.resetExpiration;
+    delete json.reset_code;
+    delete json.reset_expiration;
     return json;
   },
-  'virtuals': {
+  virtuals: {
 
-  }
-}, {
-  'byEmail': function(email) {
-    return this.forge().query({where:{ email: email }}).fetch({'withRelated':'reviews'});
   },
-  'byCode': function(code) {
+},
+{
+  byEmail: function (email) {
+    return this.forge().query({
+      where: {
+        email,
+      },
+    }).fetch();
+  },
+  byCode: function (code) {
     return this.forge()
       .query((qb) => {
-        qb.where('resetCode',code);
-        qb.where('resetExpiration','>=',new Date());
+        qb.where('reset_code', code);
+        qb.where('reset_expiration', '>=', new Date());
       })
-      .fetch()
+      .fetch();
   },
-  'byId': function(id) {
-    return this.forge().query({where:{ id: id }}).fetch({'withRelated':['reviews']});
+  byId: function (id) {
+    return this.forge().query({
+      where: {
+        id,
+      },
+    }).fetch();
   },
-  'byIds': function(ids) {
-    return this.forge().query((qb) => qb.whereIn('id',ids)).fetchAll({'withRelated':'reviews'});
+  byIds: function (ids) {
+    return this.forge().query((qb) => qb.whereIn('id', ids)).fetchAll();
   },
-  'all': function() {
-    return this.forge().fetchAll({'withRelated':'reviews'});
+  all: function () {
+    return this.forge().fetchAll();
   },
-  'seedAdmin': function() {
+  seedAdmin: function () {
     return this.forge()
-      .query({'where':{'role':'admin'}})
+      .query({
+        where: {
+          role: 'admin',
+        },
+      })
       .fetchAll()
       .then((users) => {
-        if (!users || users.length == 0) {
+        if (!users || users.length === 0) {
           const user = new User({
-            'email': 'johnj@casefoundation.org',
-            'role': 'admin',
-            'active': true
+            email: process.env.ADMIN_EMAIL,
+            role: 'admin',
+            active: true,
           });
-          const password = randomstring.generate();
-          user.setPassword(password)
+          const password = process.env.ADMIN_PASSWORD;
+          user.setPassword(password);
           return user.save().then(() => {
-            console.log('Seeded an admin user:\nEmail: ' + user.get('email') + '\nPassword: ' + password);
+            console.log(
+              `Seeded an admin user:
+                Email: ${user.get('email')}
+                Password: ${password}`
+            );
           });
         }
       });
-  }
+  },
 });

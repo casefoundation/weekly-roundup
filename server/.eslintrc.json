@@ -1,0 +1,23 @@
+{
+    "extends": "equimper",
+    "rules": {
+      "arrow-body-style": "off",
+      "camelcase": "off",
+      "eqeqeq": ["error", "smart"],
+      "linebreak-style": "off",
+      "object-shorthand": "off",
+      "no-console": "off",
+      "no-nested-ternary": "off",
+      "no-param-reassign": "off",
+      "no-prototype-builtins": "off",
+      "radix": "off",
+  
+      "jsx-a11y/label-has-for": [ 2, {
+              "components": [ "Label" ],
+              "required": {
+                  "every": [ "nesting" ]
+              },
+              "allowChildren": false
+          }]
+    }
+  }

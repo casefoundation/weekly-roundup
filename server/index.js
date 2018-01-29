@@ -3,7 +3,11 @@ const web = require('./lib/web');
 const database = require('./lib/database');
 const User = require('./lib/models/User');
 
-database.init()
+if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'production') {
+  throw new Error('Invalid NODE_ENV. Accepted values: test, production');
+}
+
+module.exports = database.init()
   .then(() => User.seedAdmin())
   .then(() => web.init(true))
   .then(() => {
@@ -11,4 +15,4 @@ database.init()
   })
   .catch((err) => {
     console.error(err);
-  })
+  });

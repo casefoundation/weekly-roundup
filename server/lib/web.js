@@ -1,45 +1,62 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const http = require('http');
-const User = require('./models/User');
 const auth = require('./auth');
-const routes = require('./routes');
+const userRoutes = require('./routes/user');
+const roundupRoutes = require('./routes/roundup');
+const articleGroupRoutes = require('./routes/articlegroup');
+const articleRoutes = require('./routes/article');
 const passport = require('passport');
+const scraper = require('./scraper');
+
+let server;
 
 exports.init = (serve) => {
   const app = express();
-  app.use(bodyParser.json({
-    'extended': true
+  app.use(bodyParser.urlencoded({
+    extended: true,
   }));
+  app.use(bodyParser.json());
   auth.init(app);
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV === 'production') {
     app.use(express.static('./build'));
     app.use(logger('combined'));
   }
 
-  //use this function in express routes to require authenticated traffic
-  const authenticate = passport.authenticate('jwt', { 'session': false });
+  // use this function in express routes to require authenticated traffic
+  const authenticate = passport.authenticate('jwt', { session: false });
 
-  app.post('/api/user/login',routes.user.login);
-  app.post('/api/user/reset',routes.user.startReset);
-  app.get('/api/user/reset/:code',routes.user.completeReset);
-  app.get('/api/user',authenticate,routes.user.getUsers);
-  app.get('/api/user/:user',authenticate,routes.user.getUser);
-  app.put('/api/user',authenticate,routes.user.saveUser);
-  app.post('/api/user/:user',authenticate,routes.user.saveUser);
+  // initialize routes
+  userRoutes.init(app, authenticate);
+  roundupRoutes.init(app, authenticate);
+  articleGroupRoutes.init(app, authenticate);
+  articleRoutes.init(app, authenticate);
 
   if (serve) {
-    return new Promise((resolve,reject) => {
-      app.listen(process.env.PORT || 8000,(err) => {
+    return new Promise((resolve, reject) => {
+      server = app.listen(process.env.PORT || 8000, (err) => {
         if (err) {
           reject(err);
         } else {
           resolve(app);
         }
-      })
-    })
-  } else {
-    return app;
+      });
+    });
   }
-}
+
+  return app;
+};
+
+exports.close = () => {
+  const browsers = scraper.getBrowsers();
+  const promises = [];
+  Object.keys(browsers).forEach(k => {
+    promises.push(browsers[k].close());
+  });
+  return Promise.all(promises)
+    .then(() => {
+      if (server) {
+        return server.close();
+      }
+    });
+};
