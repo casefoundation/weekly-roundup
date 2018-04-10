@@ -197,13 +197,13 @@ describe('Integration Tests', () => {
           .send({
             id: articlegroupid,
             name: 'test2',
-            roundup_order: 1,
+            roundup_order_shift: 0,
           })
           .end((err, res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.a('object');
             expect(res.body.data.id).to.equal(articlegroupid);
-            expect(res.body.data.roundup_order).to.equal(1);
+            expect(res.body.data.roundup_order).to.equal(0);
             expect(res.body.data.name).to.equal('test2');
             done();
           });
@@ -341,7 +341,8 @@ describe('Integration Tests', () => {
           .end((err, res) => {
             expect(res).to.have.status(200);
             expect(res.body).to.be.a('object');
-            expect(res.body.data).to.be.an('array');
+            expect(res.body.data).to.be.a('object');
+            expect(res.body.data.roundups).to.be.an('array');
             done();
           });
       });

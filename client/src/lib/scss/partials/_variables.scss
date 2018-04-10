@@ -1,0 +1,94 @@
+/******************************************************************
+Site Name: Plastick
+Author: Marc Bourguignon
+
+Stylesheet: Variables
+
+Here is where we declare all our variables like colors, fonts,
+base values, and defaults. We want to make sure this file ONLY
+contains variables that way our files don't get all messy.
+No one likes a mess.
+
+******************************************************************/
+
+/*********************
+COLORS
+Need help w/ choosing your colors? Try this site out:
+http://0to255.com/
+*********************/
+
+$alert-yellow:      #ebe16f;
+$alert-red:         #fbe3e4;
+$alert-green:       #e6efc2;
+$alert-blue:        #d5edf8;
+
+$black:             #323944;
+$white:             #fff;
+
+$extra-light-gray:  #F9F9F9;
+$light-gray:        #E2E2E2;
+$gray:              #373942;
+$text-color:        #5c6b80;
+$meta-gray:         #9fa6b4;
+
+$tan:               #eceee5;
+
+$green:             #02D138;
+$dark-green:        #00A026;
+
+$red:								#ff4d4d;
+
+$pink:							#FF3EAD;
+
+$main-text-color:   $gray;
+
+$link-color:        $main-text-color;
+$link-hover:        darken($link-color, 9%);
+
+$border-color:      #ccc;
+$disabled-gray:     #cfcfcf;
+
+
+$header-height:     50px;
+$view-menu-height:  45px;
+
+$menubar-height: 60px;
+$sidebar-width: 70px;
+$bar-section-bar-width: 12px;
+
+/*
+Here's a great tutorial on how to
+use color variables properly:
+http://sachagreif.com/sass-color-variables/
+*/
+
+%jumbo {
+	font-size: 2em;
+	line-height: 1.7em;
+}
+
+%h1 {
+	font-size: 1.4em;
+	line-height: 1.333em;
+}
+
+%h2 {
+	font-size: 1.25em;
+	line-height: 1.3em;
+}
+
+%h3 {
+	font-size: 1.125em;
+}
+
+%h4 {
+	font-size: 1.1em;
+	font-weight: 700;
+}
+
+%h5 {
+	font-size: 0.846em;
+	line-height: 2.09em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}

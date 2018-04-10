@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
+const path = require('path');
 const auth = require('./auth');
 const userRoutes = require('./routes/user');
 const roundupRoutes = require('./routes/roundup');
@@ -19,9 +20,10 @@ exports.init = (serve) => {
   app.use(bodyParser.json());
   auth.init(app);
   if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('./build'));
+    app.use(express.static(path.resolve(__dirname, '..', '..', 'client', 'build')));
     app.use(logger('combined'));
   }
+  app.use(express.static(path.resolve(__dirname, 'images')));
 
   // use this function in express routes to require authenticated traffic
   const authenticate = passport.authenticate('jwt', { session: false });
@@ -31,6 +33,11 @@ exports.init = (serve) => {
   roundupRoutes.init(app, authenticate);
   articleGroupRoutes.init(app, authenticate);
   articleRoutes.init(app, authenticate);
+
+  // Always return the main index.html, so react-router renders the route in the client
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', '..', 'client', 'build', 'index.html'));
+  });
 
   if (serve) {
     return new Promise((resolve, reject) => {

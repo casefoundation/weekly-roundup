@@ -11,7 +11,7 @@ const create = (req, res, next) => {
         return new Article({
           title: metadata.title,
           source: metadata.source,
-          published: metadata.published,
+          published: new Date(metadata.published),
           summary: metadata.summary,
           url,
           article_group_id: req.body.article_group_id,
@@ -61,33 +61,17 @@ const remove = (req, res, next) => {
 };
 
 const update = (req, res, next) => {
-  Article.ById(req.body.id)
-    .then((article) => {
-      if (req.body.hasOwnProperty('title')) {
-        article.set('title', req.body.title);
-      }
-      if (req.body.hasOwnProperty('source')) {
-        article.set('source', req.body.source);
-      }
-      if (req.body.hasOwnProperty('published')) {
-        article.set('published', req.body.published);
-      }
-      if (req.body.hasOwnProperty('summary')) {
-        article.set('summary', req.body.summary);
-      }
-      if (req.body.hasOwnProperty('url')) {
-        article.set('url', req.body.url);
-      }
-      if (req.body.hasOwnProperty('article_group_id')) {
-        article.set('article_group_id', req.body.article_group_id);
-      }
-      if (req.body.hasOwnProperty('group_order')) {
-        article.set('group_order', req.body.group_order);
-      }
-      article.save()
-        .then((updated) => {
-          res.json(formatResponse(updated));
-        });
+  Article.Update(
+    req.body.id,
+    req.body.title,
+    req.body.source,
+    req.body.published,
+    req.body.summary,
+    req.body.url,
+    req.body.article_group_id,
+    req.body.group_order_shift)
+    .then((updated) => {
+      res.json(formatResponse(updated));
     })
     .catch((err) => {
       next(err);

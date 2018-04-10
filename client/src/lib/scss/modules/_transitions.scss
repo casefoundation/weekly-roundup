@@ -1,0 +1,55 @@
+/******************************************************************
+Site Name: Plastick
+Author: Marc Bourguignon
+
+Stylesheet: Transition Styles
+
+Css for Transitions.
+
+******************************************************************/
+/*********************
+FADE
+*********************/
+.fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 200ms ease-in;
+}
+
+/*********************
+SLIDE
+*********************/
+.slide-enter {
+  max-height: 0px;
+  overflow: hidden;
+}
+
+.slide-enter.slide-enter-active {
+  height: auto;
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 500ms ease-in;
+}
+
+.slide-exit {
+  max-height: 1000px;
+  overflow: hidden;
+}
+
+.slide-exit.slide-exit-active {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 500ms ease-in;
+}

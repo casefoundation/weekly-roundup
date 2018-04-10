@@ -30,7 +30,7 @@ const remove = (req, res, next) => {
 };
 
 const update = (req, res, next) => {
-  Roundup.Update(req.user.id, req.body.id, req.body.subject, req.body.to, req.body.cc)
+  Roundup.Update(req.user.id, req.body.id, req.body.subject, req.body.to, req.body.cc, req.body.preface)
     .then((updated) => {
       res.json(formatResponse(updated));
     })
@@ -52,7 +52,13 @@ const get = (req, res, next) => {
 const getPage = (req, res, next) => {
   Roundup.ByUserId(req.user.id, req.params.page)
     .then((results) => {
-      res.json(formatResponse(results));
+      Roundup.CountByUserId(req.user.id)
+        .then((totalCount) => {
+          res.json(formatResponse({
+            roundups: results,
+            totalCount,
+          }));
+        });
     })
     .catch((err) => {
       next(err);
@@ -60,7 +66,16 @@ const getPage = (req, res, next) => {
 };
 
 const send = (req, res, next) => {
-  // TODO: ADD SENDGRID INTEGRATION
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  Roundup.SendEmail(baseUrl, req.user, req.body.roundup_id)
+    .then(() => {
+      res.json(formatResponse({
+        message: 'ok',
+      }));
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.init = (app, authenticate) => {

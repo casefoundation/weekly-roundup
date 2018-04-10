@@ -18,14 +18,10 @@ const create = (req, res, next) => {
 };
 
 const remove = (req, res, next) => {
-  ArticleGroup.ById(req.body.id)
+  ArticleGroup.Delete(req.body.id)
     .then((result) => {
       if (result) {
-        result.set('active', false);
-        result.save()
-          .then(() => {
-            res.json(formatResponse(result));
-          });
+        res.json(formatResponse(result));
       } else {
         res.json(formatResponse());
       }
@@ -36,14 +32,9 @@ const remove = (req, res, next) => {
 };
 
 const update = (req, res, next) => {
-  ArticleGroup.ById(req.body.id)
-    .then((articleGroup) => {
-      articleGroup.set('name', req.body.name);
-      articleGroup.set('roundup_order', req.body.roundup_order);
-      articleGroup.save()
-        .then((updated) => {
-          res.json(formatResponse(updated));
-        });
+  ArticleGroup.Update(req.body.id, req.body.name, req.body.roundup_order_shift)
+    .then((updated) => {
+      res.json(formatResponse(updated));
     })
     .catch((err) => {
       next(err);

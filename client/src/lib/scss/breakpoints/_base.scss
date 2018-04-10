@@ -1,0 +1,82 @@
+html, body {
+  font-size: 90%;
+}
+
+html,
+body,
+#root,
+#root > div {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: var(--dark);
+}
+
+.wrap {
+  width: 94%;
+}
+
+#login {
+  background-image: url('../images/login_bg.jpeg');
+  background-size: cover;
+  background-position: center;
+
+  .login-dialog {
+    h1 {
+      margin-top: 0;
+    }
+  }
+}
+
+#main-content {
+  margin: auto;
+  padding-top: 100px;
+}
+
+#main-content-inner {
+  padding-top: 1rem;
+}
+
+.mobile-menu-ellipsis {
+  left: 0;
+  padding: 0 1em;
+  position: absolute;
+  text-align: center;
+  top: 20px;
+  width: 20px;
+}
+
+#menubar {
+  min-height: $menubar-height;
+  position: fixed;
+  top: 0;
+  left: $sidebar-width;
+  right: 0;
+  z-index: 100;
+}
+
+#sidebar {
+  min-width: $sidebar-width;
+  max-width: $sidebar-width;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  text-align: center;
+  /* top layer */
+  z-index: 9999;
+
+  ul {
+    list-style: none;
+
+    a.active {
+      color: white !important;
+    }
+  }
+}
+
+.roundup-field {
+  display: inline-block;
+  font-weight: bold;
+  width: 80px;
+}

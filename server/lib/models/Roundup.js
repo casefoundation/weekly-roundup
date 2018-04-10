@@ -1,7 +1,9 @@
+const sgMail = require('@sendgrid/mail');
 const knex = require('../database').knex;
 const bookshelf = require('bookshelf')(knex);
 const ArticleGroup = require('./ArticleGroup');
 const Recipient = require('./Recipient');
+const { formatRoundup } = require('../roundupMailFormatter');
 
 bookshelf.plugin('virtuals');
 bookshelf.plugin('pagination');
@@ -32,11 +34,12 @@ const Roundup = module.exports = bookshelf.Model.extend({
         active: true,
       },
     })
+      .orderBy('created_at', 'ASC')
       .fetch({
         withRelated: [
-          { articleGroups: (query) => { query.where({ active: true }); } },
+          { articleGroups: (query) => { query.where({ active: true }).orderBy('roundup_order', 'ASC'); } },
           { recipients: (query) => { query.where({ active: true }); } },
-          { 'articleGroups.articles': (query) => { query.where({ active: true }); } },
+          { 'articleGroups.articles': (query) => { query.where({ active: true }).orderBy('group_order', 'ASC'); } },
         ],
         transacting,
       });
@@ -48,16 +51,26 @@ const Roundup = module.exports = bookshelf.Model.extend({
         active: true,
       },
     })
+      .orderBy('created_at', 'ASC')
       .fetchPage({
         pageSize: 10,
         page,
         withRelated: [
-          { articleGroups: (query) => { query.where({ active: true }); } },
+          { articleGroups: (query) => { query.where({ active: true }).orderBy('roundup_order', 'ASC'); } },
           { recipients: (query) => { query.where({ active: true }); } },
-          { 'articleGroups.articles': (query) => { query.where({ active: true }); } },
+          { 'articleGroups.articles': (query) => { query.where({ active: true }).orderBy('group_order', 'ASC'); } },
         ],
         transacting,
       });
+  },
+  CountByUserId: function (user_id, transacting) {
+    return this.forge().query({
+      where: {
+        user_id,
+        active: true,
+      },
+      transacting,
+    }).count('id');
   },
   Create: function (user_id) {
     return bookshelf.transaction((t) => {
@@ -91,7 +104,29 @@ const Roundup = module.exports = bookshelf.Model.extend({
         });
     });
   },
-  Update: function (user_id, roundup_id, subject, to, cc) {
+  SendEmail: function (baseUrl, user, roundup_id) {
+    return Roundup.ById(roundup_id)
+      .then(roundup => {
+        if (roundup.get('user_id') !== user.id) {
+          throw new Error('Unauthorized User');
+        }
+        sgMail.setApiKey(process.env.SENDRGRID_KEY);
+        const to = roundup.get('to').map(x => x.get('email'));
+        const cc = roundup.get('cc').map(x => x.get('email'));
+        const msg = {
+          bcc: to,
+          from: user.get('email'),
+          subject: roundup.get('subject'),
+          html: formatRoundup(baseUrl, roundup.toJSON(), user.get('signature')),
+        };
+        return sgMail.send(msg)
+          .then(() => {
+            roundup.set('date_sent', new Date(Date.now()));
+            return roundup.save();
+          });
+      });
+  },
+  Update: function (user_id, roundup_id, subject, to, cc, preface) {
     return bookshelf.transaction((t) => {
       return Roundup.ById(roundup_id)
         .then((result) => {
@@ -102,6 +137,7 @@ const Roundup = module.exports = bookshelf.Model.extend({
           }
           // Update meta
           result.set('subject', subject);
+          result.set('preface', preface);
           return result.save(null, { transacting: t })
             .then(() => {
               // Update diff of recipients

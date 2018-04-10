@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const dbConfig = {
   test: {
     mysql: {
@@ -50,6 +52,24 @@ const dbConfig = {
   },
 };
 
+// SSL Config for Test
+if (process.env.TEST_DB_MYSQL_SSL_CA) {
+  dbConfig.test.mysql.connection.ssl = {
+    ca: process.env.TEST_DB_MYSQL_SSL_CA ? fs.readFileSync(process.env.TEST_DB_MYSQL_SSL_CA) : null, // should be enough for AWS
+    key: process.env.TEST_DB_MYSQL_SSL_KEY ? fs.readFileSync(process.env.TEST_DB_MYSQL_SSL_KEY) : null, // required for google mysql cloud db
+    cert: process.env.TEST_DB_MYSQL_SSL_CERT ? fs.readFileSync(process.env.TEST_DB_MYSQL_SSL_CERT) : null, // required for google mysql cloud db
+  };
+}
+
+// SSL Config for Production
+if (process.env.DB_MYSQL_SSL_CA) {
+  dbConfig.production.mysql.connection.ssl = {
+    ca: process.env.DB_MYSQL_SSL_CA ? fs.readFileSync(process.env.DB_MYSQL_SSL_CA) : null, // should be enough for AWS
+    key: process.env.DB_MYSQL_SSL_KEY ? fs.readFileSync(process.env.DB_MYSQL_SSL_KEY) : null, // required for google mysql cloud db
+    cert: process.env.DB_MYSQL_SSL_CERT ? fs.readFileSync(process.env.DB_MYSQL_SSL_CERT) : null, // required for google mysql cloud db
+  };
+}
+
 function createUserTable(knexObj) {
   return knexObj.schema.createTable('user', (table) => {
     table.increments('id').primary().notNullable();
@@ -70,6 +90,7 @@ function createRoundupTable(knexObj) {
     table.integer('user_id').unsigned().notNullable();
     table.foreign('user_id').references('user.id');
     table.string('subject', 255);
+    table.string('preface', 4166);
     table.datetime('date_sent');
     table.boolean('active').notNullable().defaultTo(true);
     table.timestamps();
@@ -79,7 +100,7 @@ function createRoundupTable(knexObj) {
 function createArticleGroupTable(knexObj) {
   return knexObj.schema.createTable('article_group', (table) => {
     table.increments('id').primary().notNullable();
-    table.string('name').notNullable();
+    table.string('name', 255).notNullable();
     table.integer('roundup_id').unsigned().notNullable();
     table.foreign('roundup_id').references('roundup.id');
     table.integer('roundup_order').unsigned().notNullable();
@@ -94,9 +115,9 @@ function createArticleTable(knexObj) {
     table.integer('article_group_id').unsigned().notNullable();
     table.foreign('article_group_id').references('article_group.id');
     table.string('title', 255);
-    table.string('source', 64);
+    table.string('source', 255);
     table.dateTime('published');
-    table.string('summary', 2083);
+    table.string('summary', 4166);
     table.string('url', 2083);
     table.integer('group_order').unsigned().notNullable();
     table.boolean('active').notNullable().defaultTo(true);

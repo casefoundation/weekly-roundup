@@ -27,6 +27,9 @@ const fromJsonLd = (jsonld = {}) => {
   if (schemaObj.datePublished) {
     filteredObj.published = schemaObj.datePublished;
   }
+  if (schemaObj.description) {
+    filteredObj.description = schemaObj.description;
+  }
   return filteredObj;
 };
 
@@ -55,6 +58,9 @@ const fromSchemaOrg = (items = []) => {
   if (schemaObj.datePublished) {
     filteredObj.published = schemaObj.datePublished;
   }
+  if (schemaObj.description) {
+    filteredObj.description = schemaObj.description;
+  }
   return filteredObj;
 };
 
@@ -65,6 +71,9 @@ const fromOpenGraph = (og = {}) => {
   }
   if (og.site_name) {
     filteredObj.source = og.site_name;
+  }
+  if (og.description) {
+    filteredObj.description = og.description;
   }
   return filteredObj;
 };
@@ -77,6 +86,9 @@ const fromTwitter = (t = {}) => {
   if (t.site) {
     filteredObj.source = t.site;
   }
+  if (t.description) {
+    filteredObj.description = t.description;
+  }
   return filteredObj;
 };
 
@@ -85,6 +97,7 @@ const formatData = (metadata) => {
     title: '',
     source: '',
     published: '',
+    description: '',
   };
   if (metadata.twitter) {
     Object.assign(analyzedData, fromTwitter(metadata.twitter));
@@ -126,7 +139,8 @@ const staticScrape = (url) => {
             console.log(failure);
           }
           const analyzedData = formatData(metadata);
-          resolve(Object.assign(analyzedData, { summary: result.summary.join(' ') }));
+          const summary = result.summary.join(' ');
+          resolve(Object.assign(analyzedData, { summary: summary || analyzedData.description }));
         });
       });
     });
@@ -160,7 +174,8 @@ const dynamicScrape = (url) => {
                               // remove browser from dictionary
                               delete browsers[id];
                               // resolve with final scraped data
-                              resolve(Object.assign(analyzedData, { summary: result.summary.join(' ') }));
+                              const summary = result.summary.join(' ');
+                              resolve(Object.assign(analyzedData, { summary: summary || analyzedData.description }));
                             });
                         });
                       });

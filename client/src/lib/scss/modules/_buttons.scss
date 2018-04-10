@@ -1,0 +1,39 @@
+%btn {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: normal;
+  border: 0;
+  cursor: pointer;
+  @include transition(background-color 0.14s ease-in-out);
+  @include transition(color 0.14s ease-in-out);
+  @include transition(opacity 0.14s ease-in-out);
+
+  // hovering on the btn
+  &:hover, &:focus {
+    text-decoration: none;
+    outline: none;
+  } // end hover
+
+} // end .button
+
+button {
+  @extend %btn;
+}
+
+*[role=button] {
+  @extend %btn;
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+.btn-menu {
+  @extend %btn;
+
+  color: var(--dark);
+
+  &:hover {
+    color: var(--secondary);
+  }
+}

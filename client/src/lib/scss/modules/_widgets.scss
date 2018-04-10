@@ -1,0 +1,104 @@
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pagination {
+  margin-bottom: 0;
+
+  li {
+    padding: .3rem .5rem;
+
+    &.disabled {
+      a,
+      a:hover {
+        color: var(--gray);
+        cursor: inherit;
+      }
+    }
+
+    &.active {
+      a {
+        color: var(--dark);
+        font-weight: bold;
+      }
+    }
+
+    a {
+      color: var(--gray);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--secondary);
+      }
+    }
+  }
+}
+
+%bar-section {
+  &::before {
+    background-color: var(--dark);
+    content: '';
+    top: 0;
+    bottom: 0;
+    width: $bar-section-bar-width;
+    position: absolute;
+  }
+
+  & .inner {
+    margin-left: $bar-section-bar-width;
+    padding: .5rem 1rem;
+  }
+
+  color: var(--dark);
+  display: block;
+  padding: .5rem;
+  padding-left: 0;
+  position: relative;
+}
+
+.roundup-card {
+  @extend %bar-section;
+  @include transition(opacity 0.14s ease-in-out);
+
+  background-color: var(--light);
+  min-height: 70px;
+
+  &::before {
+    background-color: var(--gray);
+  }
+
+  &.draft::before {
+    background-color: var(--warning);
+  }
+
+  &:hover {
+    color: var(--dark);
+    cursor: pointer;
+    opacity: .5;
+    text-decoration: none;
+  }
+}
+
+.bar-section {
+  @extend %bar-section;
+
+  &::before {
+    background-color: var(--info)
+  }
+
+  &:nth-child(even)::before {
+    background-color: var(--warning);
+  }
+
+  & .section {
+    background-color: var(--light);
+  }
+}
+
+.gray-section {
+  @extend %bar-section;
+
+  &::before {
+    background-color: var(--secondary);
+  }
+}

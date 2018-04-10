@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const uuidv4 = require('uuid/v4');
 
 bookshelf.plugin('virtuals');
+bookshelf.plugin('pagination');
 
 const User = module.exports = bookshelf.Model.extend({
   tableName: 'user',
@@ -16,12 +17,8 @@ const User = module.exports = bookshelf.Model.extend({
     this.set('password', bcrypt.hashSync(password, 10));
   },
   resetAccount: function () {
-    this.set('resetCode', uuidv4());
-    this.set('resetExpiration', new Date(new Date().getTime() + (1000 * 60 * 60 * 24)));
-    return this.save()
-      .then(() => {
-        // TODO send reset email
-      });
+    this.set('reset_code', uuidv4());
+    this.set('reset_expiration', new Date(new Date(Date.now()).getTime() + (1000 * 60 * 60 * 24)));
   },
   isAdmin: function () {
     return this.get('role') === 'admin';
@@ -67,7 +64,7 @@ const User = module.exports = bookshelf.Model.extend({
     return this.forge()
       .query((qb) => {
         qb.where('reset_code', code);
-        qb.where('reset_expiration', '>=', new Date());
+        qb.where('reset_expiration', '>=', new Date(Date.now()));
       })
       .fetch();
   },
@@ -81,8 +78,32 @@ const User = module.exports = bookshelf.Model.extend({
   byIds: function (ids) {
     return this.forge().query((qb) => qb.whereIn('id', ids)).fetchAll();
   },
-  all: function () {
-    return this.forge().fetchAll();
+  all: function (page) {
+    if (page) {
+      return this.forge().query({
+        where: {
+          active: true,
+        },
+      })
+        .orderBy('email', 'ASC')
+        .fetchPage({
+          pageSize: 10,
+          page,
+        });
+    }
+    return this.forge().query({
+      where: {
+        active: true,
+      },
+    })
+      .orderBy('email', 'ASC').fetchAll();
+  },
+  countAll: function () {
+    return this.forge().query({
+      where: {
+        active: true,
+      },
+    }).count('id');
   },
   seedAdmin: function () {
     return this.forge()
