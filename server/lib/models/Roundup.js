@@ -114,12 +114,12 @@ const Roundup = module.exports = bookshelf.Model.extend({
         const to = roundup.get('to').map(x => x.get('email'));
         const cc = roundup.get('cc').map(x => x.get('email'));
         const msg = {
-          bcc: to,
+          to,
           from: user.get('email'),
           subject: roundup.get('subject'),
           html: formatRoundup(baseUrl, roundup.toJSON(), user.get('signature')),
         };
-        return sgMail.send(msg)
+        return sgMail.sendMultiple(msg)
           .then(() => {
             roundup.set('date_sent', new Date(Date.now()));
             return roundup.save();
