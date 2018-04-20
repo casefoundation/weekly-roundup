@@ -40,11 +40,11 @@ class PreviewRoundup extends Component {
             const a = this.props.Roundup.roundup.entities.articles[aID];
             const source = <div style={{ fontWeight: 'bold' }}>{a.source}</div>;
             const title = <div style={{ color: '#007bff', fontSize: '24px', fontWeight: 'bold'}}>{a.title}</div>;
-            let published;
-            try {
-              published = <div style={{ fontWeight: 'bold', color: '#6c757d' }}>{dateFormat(new Date(a.published), 'mm/dd/yyyy')}</div>;
-            } catch (err) {
-              published = '';
+            let published = '';
+            if (a.published !== null) {
+              try {
+                published = <div style={{ fontWeight: 'bold', color: '#6c757d' }}>{dateFormat(new Date(a.published), 'mm/dd/yyyy')}</div>;
+              } catch (err) {}
             }
             const summary = <div>{a.summary}</div>;
             articles.push( 
