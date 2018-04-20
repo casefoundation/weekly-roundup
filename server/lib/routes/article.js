@@ -11,7 +11,7 @@ const create = (req, res, next) => {
         return new Article({
           title: metadata.title,
           source: metadata.source,
-          published: new Date(metadata.published),
+          published: metadata.published && metadata.published !== '' ? new Date(metadata.published) : null,
           summary: metadata.summary,
           url,
           article_group_id: req.body.article_group_id,
