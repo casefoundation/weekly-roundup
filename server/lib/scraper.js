@@ -174,7 +174,7 @@ const dynamicScrape = (url) => {
                               // remove browser from dictionary
                               delete browsers[id];
                               // resolve with final scraped data
-                              const summary = result.summary.join(' ');
+                              const summary = result.summary ? result.summary.join(' ') || '';
                               resolve(Object.assign(analyzedData, { summary: summary || analyzedData.description }));
                             });
                         });
