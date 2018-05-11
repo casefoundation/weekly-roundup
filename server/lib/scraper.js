@@ -139,7 +139,7 @@ const staticScrape = (url) => {
             console.log(failure);
           }
           const analyzedData = formatData(metadata);
-          const summary = result.summary.join(' ');
+          const summary = result.summary ? result.summary.join(' ') || '';
           resolve(Object.assign(analyzedData, { summary: summary || analyzedData.description }));
         });
       });
