@@ -121,6 +121,15 @@ const formatData = (metadata) => {
       analyzedData.source = analyzedData.title.substr(i + 1).trim();
     }
   }
+  if (analyzedData.published && typeof analyzedData.published === 'string') {
+    const timestamp = Date.parse(analyzedData.published)
+    if (!isNaN(timestamp)) {
+      analyzedData.published = new Date(timestamp).toISOString()
+      console.log(analyzedData.published)
+    } else {
+      analyzedData.published = null
+    }
+  }
   return analyzedData;
 };
 
@@ -139,7 +148,7 @@ const staticScrape = (url) => {
             console.log(failure);
           }
           const analyzedData = formatData(metadata);
-          const summary = result.summary ? result.summary.join(' ') || '';
+          const summary = result.summary ? result.summary.join(' ') : '';
           resolve(Object.assign(analyzedData, { summary: summary || analyzedData.description }));
         });
       });
@@ -174,7 +183,7 @@ const dynamicScrape = (url) => {
                               // remove browser from dictionary
                               delete browsers[id];
                               // resolve with final scraped data
-                              const summary = result.summary ? result.summary.join(' ') || '';
+                              const summary = result.summary ? result.summary.join(' ') : '';
                               resolve(Object.assign(analyzedData, { summary: summary || analyzedData.description }));
                             });
                         });
