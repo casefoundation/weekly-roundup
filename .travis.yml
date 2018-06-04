@@ -17,7 +17,6 @@ script:
 - npm run coverage
 - codecov
 - cd $TRAVIS_BUILD_DIR/client
-- npm run lint
 - npm build
 env:
   matrix:
