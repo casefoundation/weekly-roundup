@@ -1,5 +1,6 @@
 # Weekly Roundup
 
+[![Build Status](https://travis-ci.org/casefoundation/weekly-roundup.svg?branch=master)](https://travis-ci.org/casefoundation/weekly-roundup)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8c38a1872f1156da7788/maintainability)](https://codeclimate.com/github/casefoundation/weekly-roundup/maintainability)
 
 ![Screenshot](doc/screenshot.png)
