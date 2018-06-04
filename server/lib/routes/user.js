@@ -212,8 +212,8 @@ const saveSettings = (req, res) => {
 };
 
 const sendWelcomeEmail = (email, password) => {
-  if (process.env.SENDRGRID_KEY) {
-    sgMail.setApiKey(process.env.SENDRGRID_KEY);
+  if (process.env.SENDGRID_API_KEY) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     sgMail.send({
       to: email,
       from: 'noreply_weeklyroundup@casefoundation.org',
@@ -224,7 +224,7 @@ const sendWelcomeEmail = (email, password) => {
 };
 
 const sendResetCodeEmail = (email, code) => {
-  sgMail.setApiKey(process.env.SENDRGRID_KEY);
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   sgMail.send({
     to: email,
     from: 'noreply_weeklyroundup@casefoundation.org',
@@ -234,8 +234,8 @@ const sendResetCodeEmail = (email, code) => {
 };
 
 const sendResetEmail = (email, password) => {
-  if (process.env.SENDRGRID_KEY) {
-    sgMail.setApiKey(process.env.SENDRGRID_KEY);
+  if (process.env.SENDGRID_API_KEY) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     sgMail.send({
       to: email,
       from: 'noreply_weeklyroundup@casefoundation.org',

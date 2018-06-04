@@ -1,0 +1,31 @@
+{
+  "name": "Weekly Roundup",
+  "description": "Weekly Roundup is a news clipping and emailing tool built for the Case Foundation's internal communications team.",
+  "repository": "https://github.com/casefoundation/weekly-roundup",
+  "image": "heroku/nodejs",
+  "addons": [
+    {
+      "plan": "heroku-postgresql"
+    },
+    {
+      "plan": "sendgrid"
+    }
+  ],
+  "env": {
+    "DB_CLIENT": {
+      "value": "pg" 
+    },
+    "JWT_SECRET": {
+      "generator": "secret"
+    },
+    "NODE_ENV": {
+      "value": "prod"
+    },
+    "ADMIN_EMAIL": {
+      "value": ""
+    },
+    "ADMIN_PASSWORD": {
+      "value": ""
+    }
+  }
+}

@@ -14,7 +14,7 @@ App Configuration is handled through the server/.env file in the base directory.
 *  **NODE_ENV**=[production|test] Use specified configuration 
 *  **DB_CLIENT**=[mysql|pg|sqlite3] Use specified DB client
 *  **JWT_SECRET**=[string] Use some unique string for js web token
-*  **SENDRGRID_KEY**=[string] SendGrid API Key
+*  **SENDGRID_API_KEY**=[string] SendGrid API Key
 *  **ADMIN_EMAIL**=[string] Initial Admin Email added to DB
 *  **ADMIN_PASSWORD**=[string] Initial Admin Password
 *  **LOGO_URL**=[string] URL to a logo for the email header

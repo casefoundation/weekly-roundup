@@ -4,7 +4,7 @@ const dbConfig = {
   test: {
     pg: {
       client: 'pg',
-      connection: process.env.TEST_DB_PG_CONNECTION,
+      connection: process.env.TEST_DB_PG_CONNECTION || process.env.DATABASE_URL,
       useNullAsDefault: true,
     },
   },
@@ -12,7 +12,7 @@ const dbConfig = {
   production: {
     pg: {
       client: 'pg',
-      connection: process.env.DB_PG_CONNECTION,
+      connection: process.env.DB_PG_CONNECTION || process.env.DATABASE_URL,
       useNullAsDefault: true,
     },
   },

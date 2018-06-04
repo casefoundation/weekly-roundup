@@ -110,8 +110,8 @@ const Roundup = module.exports = bookshelf.Model.extend({
         if (roundup.get('user_id') !== user.id) {
           throw new Error('Unauthorized User');
         }
-        if (process.env.SENDRGRID_KEY) {
-          sgMail.setApiKey(process.env.SENDRGRID_KEY);
+        if (process.env.SENDGRID_API_KEY) {
+          sgMail.setApiKey(process.env.SENDGRID_API_KEY);
           const to = roundup.get('to').map(x => x.get('email'));
           const cc = roundup.get('cc').map(x => x.get('email'));
           const msg = {
