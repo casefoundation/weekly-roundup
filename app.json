@@ -22,10 +22,12 @@
       "value": "prod"
     },
     "ADMIN_EMAIL": {
-      "value": ""
+      "value": "",
+      "description": "Your email address. (Used as the starter-user for the system.)"
     },
     "ADMIN_PASSWORD": {
-      "value": ""
+      "value": "",
+      "description": "A new password to use to log into the site."
     }
   }
 }
