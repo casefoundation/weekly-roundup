@@ -2,7 +2,7 @@ language: node_js
 services:
   - postgresql
 node_js:
-- '8'
+  - '8'
 before_script:
   - psql -c 'create database weeklyroundup;' -U postgres
 install:
@@ -28,4 +28,4 @@ env:
     - JWT_SECRET=notasecret
     - ADMIN_EMAIL=johnj@casefoundation.org
     - ADMIN_PASSWORD=notasecret
-    - DB_PG_CONNECTION=postgres://postgres:@localhost:5432/weeklyroundup
+    - DB_PG_CONNECTION=postgres://postgres@localhost/weeklyroundup
