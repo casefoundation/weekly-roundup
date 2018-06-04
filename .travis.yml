@@ -28,4 +28,4 @@ env:
     - JWT_SECRET=notasecret
     - ADMIN_EMAIL=johnj@casefoundation.org
     - ADMIN_PASSWORD=notasecret
-    - DB_PG_CONNECTION=postgres://postgres@localhost/weeklyroundup
+    - TEST_DB_PG_CONNECTION=postgres://postgres@localhost/weeklyroundup
