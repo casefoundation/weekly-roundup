@@ -125,7 +125,6 @@ const formatData = (metadata) => {
     const timestamp = Date.parse(analyzedData.published)
     if (!isNaN(timestamp)) {
       analyzedData.published = new Date(timestamp).toISOString()
-      console.log(analyzedData.published)
     } else {
       analyzedData.published = null
     }

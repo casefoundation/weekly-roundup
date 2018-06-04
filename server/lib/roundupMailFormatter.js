@@ -9,7 +9,6 @@ exports.formatRoundup = function (baseUrl, roundup, signature) {
         content += '<div style="color:#343a40;"><br/>';
         content += `<div style="text-align:center; color:#6c757d; font-size: 36px; font-weight: bold; margin: 20px;">${ag.name}</div>`;
         ag.articles.forEach(a => {
-          console.log(a.published)
           const source = `<div style="font-weight: bold; font-size: 16px; margin: 12px;">${a.source}</div>`;
           const title = ` <div style="color:#007bff; font-size: 24px; font-weight: bold; margin: 12px;">${a.title}</div>`;
           let published = '';
@@ -38,7 +37,7 @@ exports.formatRoundup = function (baseUrl, roundup, signature) {
   }
   return `
     <div style="width: 100%; text-align: center">
-      <img height="80" width="288" src="${baseUrl}/case_foundation.jpg" />
+      <img height="80" width="288" src="${process.env.LOGO_URL}" />
     </div>
     ${preface}
     <div>

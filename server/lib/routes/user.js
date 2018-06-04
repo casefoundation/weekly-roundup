@@ -212,13 +212,15 @@ const saveSettings = (req, res) => {
 };
 
 const sendWelcomeEmail = (email, password) => {
-  sgMail.setApiKey(process.env.SENDRGRID_KEY);
-  sgMail.send({
-    to: email,
-    from: 'noreply_weeklyroundup@casefoundation.org',
-    subject: 'Welcome to Weekly Roundup',
-    text: `Welcome to Weekly Roundup! Your temporary password is ${password}. Please change your password after logging in.`,
-  });
+  if (process.env.SENDRGRID_KEY) {
+    sgMail.setApiKey(process.env.SENDRGRID_KEY);
+    sgMail.send({
+      to: email,
+      from: 'noreply_weeklyroundup@casefoundation.org',
+      subject: 'Welcome to Weekly Roundup',
+      text: `Welcome to Weekly Roundup! Your temporary password is ${password}. Please change your password after logging in.`,
+    });
+  }
 };
 
 const sendResetCodeEmail = (email, code) => {
@@ -232,13 +234,15 @@ const sendResetCodeEmail = (email, code) => {
 };
 
 const sendResetEmail = (email, password) => {
-  sgMail.setApiKey(process.env.SENDRGRID_KEY);
-  sgMail.send({
-    to: email,
-    from: 'noreply_weeklyroundup@casefoundation.org',
-    subject: 'Weekly Roundup New Login',
-    text: `Your temporary password is ${password}. Please change your password after logging in.`,
-  });
+  if (process.env.SENDRGRID_KEY) {
+    sgMail.setApiKey(process.env.SENDRGRID_KEY);
+    sgMail.send({
+      to: email,
+      from: 'noreply_weeklyroundup@casefoundation.org',
+      subject: 'Weekly Roundup New Login',
+      text: `Your temporary password is ${password}. Please change your password after logging in.`,
+    });
+  }
 }
 
 exports.init = (app, authenticate) => {

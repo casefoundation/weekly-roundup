@@ -1,0 +1,31 @@
+language: node_js
+services:
+  - postgresql
+node_js:
+- '8'
+before_script:
+  - psql -c 'create database weeklyroundup;' -U postgres
+install:
+  - npm install -g codecov nyc mocha
+  - cd $TRAVIS_BUILD_DIR/server
+  - npm install
+  - cd $TRAVIS_BUILD_DIR/client
+  - npm install
+script:
+- cd $TRAVIS_BUILD_DIR/server
+- npm test
+- npm run coverage
+- codecov
+- cd $TRAVIS_BUILD_DIR/client
+- npm run lint
+- npm build
+env:
+  matrix:
+  global:
+    - TZ=America/New_York
+    - NODE_ENV=test
+    - DB_CLIENT=pg
+    - JWT_SECRET=notasecret
+    - ADMIN_EMAIL=johnj@casefoundation.org
+    - ADMIN_PASSWORD=notasecret
+    - DB_PG_CONNECTION=postgres://postgres:@localhost:5432/weeklyroundup

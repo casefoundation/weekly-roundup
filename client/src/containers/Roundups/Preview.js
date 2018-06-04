@@ -90,9 +90,6 @@ class PreviewRoundup extends Component {
 
     return (
       <div>
-        <div style={{ width: '100%', textAlign: 'center' }}>
-          <img height="80" width="288" src={require('../../lib/images/case_foundation.jpg')} />
-        </div>
         <div>
           {content}
         </div>

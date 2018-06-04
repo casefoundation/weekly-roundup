@@ -47,7 +47,8 @@
   },
   "scripts": {
     "test": "mocha --exit test",
-    "start": "node index.js"
+    "start": "node index.js",
+    "coverage": "nyc npm test && nyc report --reporter=text-lcov > coverage.lcov"
   },
   "author": "",
   "license": "ISC"

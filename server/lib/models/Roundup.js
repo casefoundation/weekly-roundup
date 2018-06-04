@@ -110,20 +110,23 @@ const Roundup = module.exports = bookshelf.Model.extend({
         if (roundup.get('user_id') !== user.id) {
           throw new Error('Unauthorized User');
         }
-        sgMail.setApiKey(process.env.SENDRGRID_KEY);
-        const to = roundup.get('to').map(x => x.get('email'));
-        const cc = roundup.get('cc').map(x => x.get('email'));
-        const msg = {
-          to,
-          from: user.get('email'),
-          subject: roundup.get('subject'),
-          html: formatRoundup(baseUrl, roundup.toJSON(), user.get('signature')),
-        };
-        return sgMail.sendMultiple(msg)
-          .then(() => {
-            roundup.set('date_sent', new Date(Date.now()));
-            return roundup.save();
-          });
+        if (process.env.SENDRGRID_KEY) {
+          sgMail.setApiKey(process.env.SENDRGRID_KEY);
+          const to = roundup.get('to').map(x => x.get('email'));
+          const cc = roundup.get('cc').map(x => x.get('email'));
+          const msg = {
+            to,
+            from: user.get('email'),
+            subject: roundup.get('subject'),
+            html: formatRoundup(baseUrl, roundup.toJSON(), user.get('signature')),
+          };
+          return sgMail.sendMultiple(msg)
+            .then(() => {
+              roundup.set('date_sent', new Date(Date.now()));
+              return roundup.save();
+            });
+        }
+        return roundup.save();
       });
   },
   Update: function (user_id, roundup_id, subject, to, cc, preface) {
