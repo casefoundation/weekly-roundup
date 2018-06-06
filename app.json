@@ -6,9 +6,6 @@
   "addons": [
     {
       "plan": "heroku-postgresql"
-    },
-    {
-      "plan": "sendgrid"
     }
   ],
   "env": {
@@ -21,13 +18,17 @@
     "NODE_ENV": {
       "value": "production"
     },
+    "SENDGRID_API_KEY": {
+      "value": "",
+      "description": "API key for SendGrid service."
+    },
     "ADMIN_EMAIL": {
       "value": "",
       "description": "Your email address. (Used as the starter-user for the system.)"
     },
     "ADMIN_PASSWORD": {
       "value": "",
-      "description": "A new password to use to log into the site."
+      "description": "A new password to use to log into the site. (At least 6 characters long.)"
     },
     "LOGO_URL": {
       "value": "",
