@@ -1,5 +1,5 @@
 {
-  "name": "review-o-matic",
+  "name": "weekly-roundup",
   "scripts": {
     "postinstall": "cd server && npm install && cd ../client && npm install && npm run build",
     "start": "cd server && node index.js"
