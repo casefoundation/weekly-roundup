@@ -16,7 +16,7 @@
       "generator": "secret"
     },
     "NODE_ENV": {
-      "value": "prod"
+      "value": "production"
     },
     "ADMIN_EMAIL": {
       "value": "",
