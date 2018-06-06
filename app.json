@@ -6,9 +6,6 @@
   "addons": [
     {
       "plan": "heroku-postgresql"
-    },
-    {
-      "plan": "sendgrid"
     }
   ],
   "env": {
@@ -28,6 +25,14 @@
     "ADMIN_PASSWORD": {
       "value": "",
       "description": "A new password to use to log into the site."
+    },
+    "SENDGRID_API_KEY": {
+      "value": "",
+      "description": "Sendgrid API key to send emails."
+    },
+    "LOGO_URL": {
+      "value": "",
+      "description": "Absolute URL of a transparent or white-background logo for email headers."
     }
   }
 }
