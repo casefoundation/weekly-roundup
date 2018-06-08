@@ -1,5 +1,6 @@
 const Roundup = require('../models/Roundup');
 const formatResponse = require('./util').formatResponse;
+const { formatRoundup } = require('../roundupMailFormatter');
 
 const create = (req, res, next) => {
   Roundup.Create(req.user.id)
@@ -49,6 +50,16 @@ const get = (req, res, next) => {
     });
 };
 
+const preview = (req, res, next) => {
+  Roundup.ById(req.params.roundup_id)
+    .then((result) => {
+      res.send(formatRoundup('/', result.toJSON(), req.user.get('signature')));
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
 const getPage = (req, res, next) => {
   Roundup.ByUserId(req.user.id, req.params.page)
     .then((results) => {
@@ -80,6 +91,7 @@ const send = (req, res, next) => {
 
 exports.init = (app, authenticate) => {
   app.put('/api/roundup', authenticate, create);
+  app.get('/api/roundup/:roundup_id/preview', authenticate, preview);
   app.get('/api/roundup/:roundup_id', authenticate, get);
   app.post('/api/roundup', authenticate, update);
   app.post('/api/roundup/remove', authenticate, remove);

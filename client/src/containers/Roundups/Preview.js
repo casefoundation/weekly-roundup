@@ -12,12 +12,21 @@ import { getError } from '../../common/util';
 
 import Dashboard from '../../components/Layout/Dashboard';
 import MenuButton from '../../components/Button/MenuButton';
+import { axiosReq } from '../../actions/util';
 
 class PreviewRoundup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      preview: '',
+    };
+  }
+
   componentDidMount() {
     this.props.getRoundup(this.props.match.params.id);
     // Get most updated user data
     this.props.checkAuth();
+    this.loadPreview();
   }
 
   onCancel = () => {
@@ -28,76 +37,17 @@ class PreviewRoundup extends Component {
     this.props.sendEmail(this.props.match.params.id);
   }
 
+  loadPreview = () => {
+    axiosReq().get(`/api/roundup/${this.props.match.params.id}/preview`)
+      .then(response => {
+        this.setState({
+          preview: response.data
+        });
+      });
+  }
+
   formatRoundup = () => {
-    const content = [];
-    if (this.props.Roundup.roundup && this.props.Roundup.roundup.entities.roundups[this.props.Roundup.roundup.result].articleGroups) {
-      const roundup = this.props.Roundup.roundup.entities.roundups[this.props.Roundup.roundup.result];
-      roundup.articleGroups.forEach(agID => {
-        const ag = this.props.Roundup.roundup.entities.articleGroups[agID];
-        const articles = [];
-        if (ag.articles) {
-          ag.articles.forEach(aID => {
-            const a = this.props.Roundup.roundup.entities.articles[aID];
-            const source = <div style={{ fontWeight: 'bold' }}>{a.source}</div>;
-            const title = <div style={{ color: '#007bff', fontSize: '24px', fontWeight: 'bold'}}>{a.title}</div>;
-            let published = '';
-            if (a.published !== null) {
-              try {
-                published = <div style={{ fontWeight: 'bold', color: '#6c757d' }}>{dateFormat(new Date(a.published), 'mm/dd/yyyy')}</div>;
-              } catch (err) {}
-            }
-            const summary = <div>{a.summary}</div>;
-            articles.push( 
-              <div key={a.id}>
-                <a href={a.url}>{title}</a>
-                {source}
-                {published}
-                {summary}
-                <br />
-              </div>
-            );
-          });
-        }
-        // Add Email Preface before articles
-        if (roundup.preface) {
-          content.push(
-            <div key="-99">
-              {roundup.preface}
-            </div>
-          );
-        }
-        // Only show article groups with articles
-        if (articles.length > 0) {
-          content.push(
-            <div key={ag.id}>
-              <br />
-              <div style={{ textAlign: 'center', color: '#6c757d', fontSize: '36px', fontWeight: 'bold' }}>{ag.name}</div>
-              <br />
-              {articles}
-              <hr />
-            </div>
-          );
-        }
-      });
-    }
-
-    const signature = [];
-    if (this.props.Auth.user.signature) {
-      this.props.Auth.user.signature.split('\n').forEach(line => {
-        signature.push(<div key={line}>{line}</div>);
-      });
-    }
-
-    return (
-      <div>
-        <div>
-          {content}
-        </div>
-        <div>
-          {signature}
-        </div>
-      </div>
-    );
+    return this.state.preview ? (<div dangerouslySetInnerHTML={{ __html: this.state.preview }} />) : null;
   }
 
   render() {
