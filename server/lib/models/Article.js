@@ -5,9 +5,25 @@ const ArticleGroup = require('./ArticleGroup');
 
 bookshelf.plugin('virtuals');
 
+const MAX_SUMMARY_LENGTH = 4100
+
 const Article = module.exports = bookshelf.Model.extend({
   tableName: 'article',
   hasTimestamps: true,
+  initialize: function () {
+    this.on('creating', function () {
+      this.trimSummary()
+    }, this)
+    this.on('updating', function () {
+      this.trimSummary()
+    }, this)
+    bookshelf.Model.prototype.initialize.apply(this, arguments)
+  },
+  trimSummary: function () {
+    if (this.get('summary') && this.get('summary').length > MAX_SUMMARY_LENGTH) {
+      this.set('summary', this.get('summary').substring(0, MAX_SUMMARY_LENGTH))
+    }
+  },
   articleGroup: function () {
     return this.belongsTo(ArticleGroup);
   },
