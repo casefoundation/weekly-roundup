@@ -90,7 +90,11 @@ class ViewRoundup extends Component {
       let lastOrder = 0;
       if (this.props.Roundup.roundup.entities.articleGroups) {
         const articleGroups = Object.values(this.props.Roundup.roundup.entities.articleGroups);
-        lastOrder = articleGroups[articleGroups.length - 1].roundup_order;
+        articleGroups.forEach(grp => {
+          if (grp.roundup_order > lastOrder) {
+            lastOrder = grp.roundup_order;
+          }
+        });
       }
       this.props.createArticleGroup(this.props.match.params.id, name, lastOrder + 1);
     }
