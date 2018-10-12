@@ -47,7 +47,7 @@ class Archive extends Component {
 
     const roundupMarkup = [];
     if (this.props.Archive.archive.result && this.props.Archive.archive.entities.roundups) {
-      Object.values(this.props.Archive.archive.entities.roundups).forEach(roundup => {
+      Object.values(this.props.Archive.archive.entities.roundups).reverse().forEach(roundup => {
         let articleCount = 0;
         roundup.articleGroups.forEach(agID => {
           articleCount += this.props.Archive.archive.entities.articleGroups[agID].articles.length;

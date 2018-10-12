@@ -53,7 +53,7 @@ const Roundup = module.exports = bookshelf.Model.extend({
         active: true,
       },
     })
-      .orderBy('created_at', 'ASC')
+      .orderBy('created_at', 'DESC')
       .fetchPage({
         pageSize: 10,
         page,
@@ -88,7 +88,7 @@ const Roundup = module.exports = bookshelf.Model.extend({
               const promises = [];
               // Add recipients of most recent roundup
               if (results.models.length > 0) {
-                results.models[results.models.length - 1].related('recipients').forEach(r => {
+                results.models[0].related('recipients').forEach(r => {
                   const rClone = new Recipient({
                     email: r.get('email'),
                     type: r.get('type'),
