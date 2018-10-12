@@ -5,6 +5,7 @@ const Article = require('./Article');
 const Roundup = require('./Roundup');
 
 bookshelf.plugin('virtuals');
+bookshelf.plugin(require('bookshelf-cascade-delete'));
 
 const ArticleGroup = module.exports = bookshelf.Model.extend({
   tableName: 'article_group',
@@ -20,6 +21,7 @@ const ArticleGroup = module.exports = bookshelf.Model.extend({
   },
 },
 {
+  dependents: ['articles'],
   ById: function (id, transacting) {
     return this.forge().query({
       where: {

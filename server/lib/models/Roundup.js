@@ -7,6 +7,7 @@ const { formatRoundup } = require('../roundupMailFormatter');
 
 bookshelf.plugin('virtuals');
 bookshelf.plugin('pagination');
+bookshelf.plugin(require('bookshelf-cascade-delete'));
 
 const Roundup = module.exports = bookshelf.Model.extend({
   tableName: 'roundup',
@@ -27,6 +28,7 @@ const Roundup = module.exports = bookshelf.Model.extend({
   },
 },
 {
+  dependents: ['articleGroups'],
   ById: function (id, transacting) {
     return this.forge().query({
       where: {
