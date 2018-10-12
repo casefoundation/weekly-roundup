@@ -53,7 +53,7 @@ const Roundup = module.exports = bookshelf.Model.extend({
         active: true,
       },
     })
-      .orderBy('created_at', 'ASC')
+      .orderBy('created_at', 'DESC')
       .fetchPage({
         pageSize: 10,
         page,
