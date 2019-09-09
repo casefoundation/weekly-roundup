@@ -231,7 +231,7 @@ describe('Integration Tests', () => {
             expect(res.body.data).to.have.property('url');
             expect(res.body.data).to.have.property('article_group_id');
             expect(res.body.data).to.have.property('group_order');
-            expect(res.body.data.title).to.equal('How \'Impact Investing\' Can Put a Profitable Spin on Charity');
+            expect(res.body.data.title).to.equal('How ‘Impact Investing‘ Can Put a Profitable Spin on Charity');
             expect(res.body.data.source).to.equal('Fortune');
             expect(res.body.data.article_group_id).to.equal(articlegroupid);
             articleid = res.body.data.id;
