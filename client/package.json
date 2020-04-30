@@ -11,7 +11,7 @@
     "dot-prop-immutable": "^1.4.0",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "node-sass-chokidar": "0.0.3",
     "normalizr": "^3.2.4",
     "popper": "^1.0.1",
