@@ -30,7 +30,7 @@
     "passport-jwt": "^3.0.1",
     "pg": "^7.4.1",
     "preq": "^0.5.4",
-    "puppeteer": "^1.0.0",
+    "puppeteer": "^1.13.0",
     "randomstring": "^1.1.5",
     "request": "^2.83.0",
     "sqlite3": "^4.1.0",
