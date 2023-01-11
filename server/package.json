@@ -20,7 +20,7 @@
     "express": "^4.16.2",
     "html-metadata": "^1.6.3",
     "jsonwebtoken": "^8.1.0",
-    "knex": "^0.14.1",
+    "knex": "^2.4.0",
     "morgan": "^1.9.0",
     "mysql": "^2.15.0",
     "mysql2": "^1.5.1",
@@ -43,7 +43,7 @@
     "eslint-config-equimper": "^2.2.1",
     "eslint-plugin-class-property": "^1.1.0",
     "eslint-plugin-import": "^2.8.0",
-    "knex": "^0.14.2",
+    "knex": "^2.4.0",
     "mocha": "^5.0.0"
   },
   "scripts": {
